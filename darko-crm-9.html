@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>داشبورد CRM درکو</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#8B0000">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%238B0000' width='192' height='192' rx='45'/><text x='50%' y='50%' font-size='120' font-weight='bold' fill='%23fbf0da' text-anchor='middle' dominant-baseline='middle'>☕</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            direction: rtl;
+        }
+        
+        body {
+            font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+            direction: rtl;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: #8B0000;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #8B0000;
+            flex-wrap: wrap;
+            flex-direction: row-reverse;
+        }
+        
+        .nav-tabs button {
+            padding: 12px 20px;
+            border: none;
+            background: #fbf0da;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            border-radius: 4px 4px 0 0;
+            transition: all 0.3s;
+            font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
+            color: #8B0000;
+        }
+        
+        .nav-tabs button.active {
+            background: #8B0000;
+            color: #fbf0da;
+        }
+        
+        .nav-tabs button:hover {
+            background: #8B0000;
+            color: #fbf0da;
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .form-section {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            border-right: 4px solid #8B0000;
+        }
+        
+        .form-section h2 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #8B0000;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        
+        .form-grid.full {
+            grid-template-columns: 1fr;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 3px;
+            color: #8B0000;
+            font-size: 11px;
+        }
+        
+        .form-group input,
+        .form-group select {
+            padding: 6px 8px;
+            border: 1px solid #fbf0da;
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
+            text-align: right;
+            height: 32px;
+            width: 100%;
+            background: #fbf0da;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #8B0000;
+            box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
+        }
+        
+        .btn {
+            padding: 7px 14px;
+            border: none;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+            font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
+        }
+        
+        .btn-primary {
+            background: #8B0000;
+            color: #fbf0da;
+        }
+        
+        .btn-primary:hover {
+            background: #6b0000;
+        }
+        
+        .btn-success {
+            background: #8B0000;
+            color: #fbf0da;
+        }
+        
+        .btn-success:hover {
+            background: #6b0000;
+        }
+        
+        .btn-danger {
+            background: #707070;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #505050;
+        }
+        
+        .btn-secondary {
+            background: #707070;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #505050;
+        }
+        
+        .buttons-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 12px;
+            flex-direction: row-reverse;
+        }
+        
+        .success-message {
+            background: #fbf0da;
+            color: #8B0000;
+            padding: 12px 16px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            display: none;
+            border-right: 3px solid #8B0000;
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+            border-top: 3px solid #8B0000;
+        }
+        
+        .stat-card h3 {
+            color: #8B0000;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: none;
+            margin-bottom: 10px;
+        }
+        
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #8B0000;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            border-right: 4px solid #8B0000;
+        }
+        
+        .chart-container h3 {
+            margin-bottom: 15px;
+            color: #8B0000;
+            font-size: 14px;
+        }
+        
+        .time-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 200px;
+            justify-content: flex-start;
+            flex-wrap: wrap;
+            flex-direction: row-reverse;
+        }
+        
+        .bar {
+            flex: 1;
+            background: #8B0000;
+            border-radius: 4px 4px 0 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            min-width: 30px;
+            padding-bottom: 5px;
+            position: relative;
+        }
+        
+        .bar span {
+            font-size: 10px;
+            color: #707070;
+            position: absolute;
+            bottom: -20px;
+            white-space: nowrap;
+        }
+        
+        .bar-value {
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            direction: rtl;
+        }
+        
+        thead {
+            background: #8B0000;
+            color: #fbf0da;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: right;
+            font-size: 13px;
+        }
+        
+        tbody tr {
+            border-bottom: 1px solid #fbf0da;
+        }
+        
+        tbody tr:hover {
+            background: #fbf0da;
+        }
+        
+        .channel-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .channel-instagram { background: #8B0000; color: #fbf0da; }
+        .channel-billboard { background: #707070; color: #fbf0da; }
+        .channel-camper { background: #8B0000; color: #fbf0da; }
+        .channel-dahan { background: #707070; color: #fbf0da; }
+        .channel-other { background: #707070; color: #fbf0da; }
+        
+        .search-box {
+            margin-bottom: 20px;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #fbf0da;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
+            text-align: right;
+            background: #fbf0da;
+        }
+        
+        .import-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-right: 4px solid #8B0000;
+        }
+        
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+        
+        .file-input-wrapper input[type=file] {
+            position: absolute;
+            left: -9999px;
+        }
+        
+        .import-info {
+            background: #fbf0da;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            font-size: 12px;
+            line-height: 1.6;
+            text-align: right;
+            color: #8B0000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>☕ داشبورد CRM کافه دارکو</h1>
+            <p>مدیریت سریع لیدها و مشتریان</p>
+        </header>
+        
+        <div class="nav-tabs">
+            <button class="tab-btn active" data-tab="lead-entry">ثبت لید</button>
+            <button class="tab-btn" data-tab="dashboard">داشبورد</button>
+            <button class="tab-btn" data-tab="leads-list">لیست لیدها</button>
+            <button class="tab-btn" data-tab="import-export">صادر/وارد</button>
+        </div>
+        
+        <!-- TAB: ثبت لید -->
+        <div id="lead-entry" class="tab-content active">
+            <div class="form-section">
+                <h2>⚡ ثبت لید جدید (زیر ۲۰ ثانیه)</h2>
+                <div id="successMsg" class="success-message">✓ لید با موفقیت ثبت شد!</div>
+                
+                <form id="leadForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="phoneInput">شماره تلفن مشتری *</label>
+                            <input type="tel" id="phoneInput" placeholder="۰۹۱۲۳۴۵۶۷۸۹" required autofocus>
+                        </div>
+                        <div class="form-group">
+                            <label for="nameInput">نام و نام خانوادگی *</label>
+                            <input type="text" id="nameInput" placeholder="علی محمدی" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="channelInput">کانال پیدا کردن *</label>
+                            <select id="channelInput" required>
+                                <option value="">انتخاب کنید</option>
+                                <option value="اینستاگرام">اینستاگرام</option>
+                                <option value="تبلیغات خیابانی">تبلیغات خیابانی</option>
+                                <option value="کمپر">کمپر</option>
+                                <option value="دهان به دهان">دهان به دهان</option>
+                                <option value="سایر">سایر</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="timeInput">ساعت ثبت *</label>
+                            <input type="time" id="timeInput" required>
+                        </div>
+                    </div>
+                    
+                    <div class="buttons-group">
+                        <button type="submit" class="btn btn-primary">✓ ثبت لید</button>
+                        <button type="reset" class="btn btn-secondary">پاک کن</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- TAB: داشبورد -->
+        <div id="dashboard" class="tab-content">
+            <div class="dashboard">
+                <div class="stat-card">
+                    <h3>کل لیدها</h3>
+                    <div class="value" id="totalLeads">۰</div>
+                </div>
+                <div class="stat-card">
+                    <h3>امروز</h3>
+                    <div class="value" id="todayLeads">۰</div>
+                </div>
+                <div class="stat-card">
+                    <h3>این هفته</h3>
+                    <div class="value" id="weekLeads">۰</div>
+                </div>
+                <div class="stat-card">
+                    <h3>این ماه</h3>
+                    <div class="value" id="monthLeads">۰</div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <h3>لیدها به تفکیک ساعت (امروز)</h3>
+                <div class="time-chart" id="timeChart">
+                    <p style="color: #707070;">هنوز داده‌ای برای امروز ثبت نشده</p>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <h3>لیدها به تفکیک کانال</h3>
+                <div id="channelStats"></div>
+            </div>
+        </div>
+        
+        <!-- TAB: لیست لیدها -->
+        <div id="leads-list" class="tab-content">
+            <div class="form-section">
+                <h2>جستجو در لیدها</h2>
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="نام یا شماره تلفن را جستجو کنید...">
+                </div>
+                
+                <div id="leadsTableContainer"></div>
+            </div>
+        </div>
+        
+        <!-- TAB: صادر/وارد -->
+        <div id="import-export" class="tab-content">
+            <div class="import-section">
+                <h2>📥 وارد کردن از اکسل</h2>
+                <p style="margin-bottom: 15px; color: #707070;">فایل اکسل را با ستون‌های زیر آپلود کنید:</p>
+                <div class="import-info">
+                    <strong>ستون‌های مورد نیاز:</strong><br>
+                    • Phone (شماره تلفن)<br>
+                    • Name (نام)<br>
+                    • Channel (کانال: اینستاگرام، تبلیغات خیابانی، کمپر، دهان به دهان، سایر)<br>
+                    • Time (ساعت به فرمت HH:MM)<br>
+                    • Date (تاریخ - اختیاری، فرمت: YYYY-MM-DD)
+                </div>
+                <div class="file-input-wrapper">
+                    <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" />
+                    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                        انتخاب فایل و وارد کردن
+                    </button>
+                </div>
+                <p id="importStatus" style="margin-top: 10px; color: #707070;"></p>
+            </div>
+            
+            <div class="import-section" style="margin-top: 30px;">
+                <h2>📤 صادر کردن به اکسل</h2>
+                <p style="margin-bottom: 15px; color: #707070;">تمام لیدها را به اکسل صادر کنید</p>
+                <div class="buttons-group">
+                    <button class="btn btn-success" onclick="exportToExcel()">
+                        ⬇ دانلود تمام لیدها
+                    </button>
+                    <button class="btn btn-success" onclick="exportTodayLeads()">
+                        ⬇ دانلود لیدهای امروز
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toPersianNumber(num) {
+            if (typeof num !== 'number') return num;
+            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+            return String(num).split('').map(d => isNaN(d) ? d : persianDigits[d]).join('');
+        }
+        
+        const STORAGE_KEY = 'darko_crm_leads';
+        
+        function getLeads() {
+            const stored = localStorage.getItem(STORAGE_KEY);
+            return stored ? JSON.parse(stored) : [];
+        }
+        
+        function saveLeads(leads) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(leads));
+        }
+        
+        function addLead(phone, name, channel, time, date = null) {
+            const leads = getLeads();
+            const lead = {
+                id: Date.now(),
+                phone,
+                name,
+                channel,
+                time,
+                date: date || new Date().toISOString().split('T')[0],
+                createdAt: new Date().toISOString()
+            };
+            leads.push(lead);
+            saveLeads(leads);
+            return lead;
+        }
+        
+        function deleteLead(id) {
+            let leads = getLeads();
+            leads = leads.filter(l => l.id !== id);
+            saveLeads(leads);
+        }
+        
+        document.getElementById('leadForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const phone = document.getElementById('phoneInput').value.trim();
+            const name = document.getElementById('nameInput').value.trim();
+            const channel = document.getElementById('channelInput').value;
+            const time = document.getElementById('timeInput').value;
+            
+            if (!phone || !name || !channel || !time) {
+                alert('لطفاً تمام فیلدها را پر کنید');
+                return;
+            }
+            
+            addLead(phone, name, channel, time);
+            
+            const msg = document.getElementById('successMsg');
+            msg.classList.add('show');
+            setTimeout(() => msg.classList.remove('show'), 3000);
+            
+            document.getElementById('leadForm').reset();
+            document.getElementById('phoneInput').focus();
+            
+            updateDashboard();
+            renderLeadsList();
+        });
+        
+        window.addEventListener('load', () => {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('timeInput').value = `${hours}:${minutes}`;
+        });
+        
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+                
+                e.target.classList.add('active');
+                const tabId = e.target.dataset.tab;
+                document.getElementById(tabId).classList.add('active');
+                
+                if (tabId === 'dashboard') updateDashboard();
+                if (tabId === 'leads-list') renderLeadsList();
+            });
+        });
+        
+        function updateDashboard() {
+            const leads = getLeads();
+            const today = new Date().toISOString().split('T')[0];
+            const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+            const monthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+            
+            const todayLeadsCount = leads.filter(l => l.date === today).length;
+            const weekLeadsCount = leads.filter(l => l.date >= weekAgo).length;
+            const monthLeadsCount = leads.filter(l => l.date >= monthAgo).length;
+            
+            document.getElementById('totalLeads').textContent = toPersianNumber(leads.length);
+            document.getElementById('todayLeads').textContent = toPersianNumber(todayLeadsCount);
+            document.getElementById('weekLeads').textContent = toPersianNumber(weekLeadsCount);
+            document.getElementById('monthLeads').textContent = toPersianNumber(monthLeadsCount);
+            
+            renderTimeChart(leads, today);
+            renderChannelStats(leads);
+        }
+        
+        function renderTimeChart(leads, today) {
+            const todayLeads = leads.filter(l => l.date === today);
+            const hours = {};
+            
+            for (let i = 0; i < 24; i++) {
+                const hour = String(i).padStart(2, '0');
+                hours[hour] = todayLeads.filter(l => l.time.startsWith(hour)).length;
+            }
+            
+            const chart = document.getElementById('timeChart');
+            if (todayLeads.length === 0) {
+                chart.innerHTML = '<p style="color: #707070;">هنوز داده‌ای برای امروز ثبت نشده</p>';
+                return;
+            }
+            
+            const maxCount = Math.max(...Object.values(hours), 1);
+            const chartHTML = Object.entries(hours)
+                .filter(([_, count]) => count > 0)
+                .map(([hour, count]) => {
+                    const height = (count / maxCount) * 150;
+                    return `
+                        <div class="bar" style="height: ${height}px;">
+                            <span>${hour}:۰۰</span>
+                            <div class="bar-value">${toPersianNumber(count)}</div>
+                        </div>
+                    `;
+                })
+                .join('');
+            
+            chart.innerHTML = chartHTML || '<p style="color: #707070;">هنوز داده‌ای برای امروز ثبت نشده</p>';
+        }
+        
+        function renderChannelStats(leads) {
+            const channels = {};
+            leads.forEach(l => {
+                channels[l.channel] = (channels[l.channel] || 0) + 1;
+            });
+            
+            const html = Object.entries(channels)
+                .map(([channel, count]) => {
+                    const percentage = ((count / leads.length) * 100).toFixed(1);
+                    const channelClass = `channel-${getChannelClass(channel)}`;
+                    return `
+                        <div style="margin-bottom: 12px;">
+                            <span class="channel-badge ${channelClass}">${channel}</span>
+                            <span style="margin-right: 10px; color: #707070;">${toPersianNumber(count)} لید (${toPersianNumber(percentage.replace(/\./g, '،'))}%)</span>
+                        </div>
+                    `;
+                })
+                .join('');
+            
+            document.getElementById('channelStats').innerHTML = html;
+        }
+        
+        function getChannelClass(channel) {
+            const map = {
+                'اینستاگرام': 'instagram',
+                'تبلیغات خیابانی': 'billboard',
+                'کمپر': 'camper',
+                'دهان به دهان': 'dahan',
+                'سایر': 'other'
+            };
+            return map[channel] || 'other';
+        }
+        
+        function renderLeadsList() {
+            const leads = getLeads();
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            const filtered = leads.filter(l => 
+                l.phone.includes(searchTerm) || l.name.toLowerCase().includes(searchTerm)
+            );
+            
+            if (filtered.length === 0) {
+                document.getElementById('leadsTableContainer').innerHTML = '<p style="text-align: center; color: #707070; padding: 20px;">هنوز لیدی ثبت نشده</p>';
+                return;
+            }
+            
+            const html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>تاریخ و ساعت</th>
+                            <th>کانال</th>
+                            <th>نام</th>
+                            <th>شماره تلفن</th>
+                            <th>عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${filtered.reverse().map(l => `
+                            <tr>
+                                <td>${l.date} - ${l.time}</td>
+                                <td><span class="channel-badge channel-${getChannelClass(l.channel)}">${l.channel}</span></td>
+                                <td>${l.name}</td>
+                                <td>${l.phone}</td>
+                                <td><button class="btn btn-danger" onclick="deleteLead(${l.id}); renderLeadsList();" style="padding: 6px 12px; font-size: 11px;">حذف</button></td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+            
+            document.getElementById('leadsTableContainer').innerHTML = html;
+        }
+        
+        document.getElementById('searchInput').addEventListener('input', renderLeadsList);
+        
+        function exportToExcel() {
+            const leads = getLeads();
+            if (leads.length === 0) {
+                alert('هنوز لیدی برای صادرات وجود ندارد');
+                return;
+            }
+            
+            const data = leads.map(l => ({
+                'شماره تلفن': l.phone,
+                'نام': l.name,
+                'کانال': l.channel,
+                'ساعت': l.time,
+                'تاریخ': l.date
+            }));
+            
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'لیدها');
+            XLSX.writeFile(wb, `درکو-لیدها-${new Date().toISOString().split('T')[0]}.xlsx`);
+        }
+        
+        function exportTodayLeads() {
+            const leads = getLeads();
+            const today = new Date().toISOString().split('T')[0];
+            const todayLeads = leads.filter(l => l.date === today);
+            
+            if (todayLeads.length === 0) {
+                alert('لیدی برای امروز ثبت نشده');
+                return;
+            }
+            
+            const data = todayLeads.map(l => ({
+                'شماره تلفن': l.phone,
+                'نام': l.name,
+                'کانال': l.channel,
+                'ساعت': l.time,
+                'تاریخ': l.date
+            }));
+            
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'امروز');
+            XLSX.writeFile(wb, `درکو-لیدهای-امروز-${today}.xlsx`);
+        }
+        
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const data = new Uint8Array(event.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const rows = XLSX.utils.sheet_to_json(sheet);
+                    
+                    let imported = 0;
+                    rows.forEach(row => {
+                        const phone = String(row.Phone || row['شماره تلفن'] || '').trim();
+                        const name = String(row.Name || row['نام'] || '').trim();
+                        const channel = String(row.Channel || row['کانال'] || '').trim();
+                        const time = String(row.Time || row['ساعت'] || '').trim();
+                        const date = String(row.Date || row['تاریخ'] || '').trim();
+                        
+                        if (phone && name && channel && time) {
+                            addLead(phone, name, channel, time, date || null);
+                            imported++;
+                        }
+                    });
+                    
+                    document.getElementById('importStatus').textContent = `✓ ${toPersianNumber(imported)} لید با موفقیت وارد شد`;
+                    document.getElementById('fileInput').value = '';
+                    updateDashboard();
+                    renderLeadsList();
+                } catch (error) {
+                    document.getElementById('importStatus').textContent = '✗ خطا در خواندن فایل';
+                }
+            };
+            reader.readAsArrayBuffer(file);
+        });
+        
+        updateDashboard();
+    </script>
+
+    <script>
+        // Service Worker Registration
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./service-worker.js')
+                .then(registration => {
+                    console.log('Service Worker registered:', registration);
+                })
+                .catch(error => {
+                    console.log('Service Worker registration failed:', error);
+                });
+        }
+    </script>
+</body>
+</html>
