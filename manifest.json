@@ -1,7 +1,7 @@
 {
   "name": "داشبورد CRM کافه دارکو",
   "short_name": "CRM دارکو",
-  "description": "نرم‌افزار مدیریت لیدها و مشتریان کافه دارکو. ثبت سریع لیدها در زیر ۲۰ ثانیه، داشبورد تحلیلی، و صادرات اکسل.",
+  "description": "نرم‌افزار مدیریت لیدها و مشتریان کافه دارکو",
   "start_url": "./darko-crm.html",
   "scope": "./",
   "display": "standalone",
@@ -20,14 +20,6 @@
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any"
-    }
-  ],
-  "screenshots": [
-    {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%238B0000' width='540' height='720'/><text x='50%' y='50%' font-size='80' font-weight='bold' fill='%23fbf0da' text-anchor='middle' dominant-baseline='middle'>CRM دارکو</text></svg>",
-      "sizes": "540x720",
-      "type": "image/svg+xml",
-      "form_factor": "narrow"
     }
   ]
 }
