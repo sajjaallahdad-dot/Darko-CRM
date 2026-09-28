@@ -1,851 +1,126 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>داشبورد CRM درکو</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#8B0000">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%238B0000' width='192' height='192' rx='45'/><text x='50%' y='50%' font-size='120' font-weight='bold' fill='%23fbf0da' text-anchor='middle' dominant-baseline='middle'>☕</text></svg>">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        html {
-            direction: rtl;
-        }
-        
-        body {
-            font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
-            background: #f5f5f5;
-            color: #333;
-            line-height: 1.6;
-            direction: rtl;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        header {
-            background: #8B0000;
-            color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 30px;
-            text-align: center;
-        }
-        
-        header h1 {
-            font-size: 28px;
-            margin-bottom: 5px;
-        }
-        
-        .nav-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #8B0000;
-            flex-wrap: wrap;
-            flex-direction: row-reverse;
-        }
-        
-        .nav-tabs button {
-            padding: 12px 20px;
-            border: none;
-            background: #fbf0da;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            border-radius: 4px 4px 0 0;
-            transition: all 0.3s;
-            font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
-            color: #8B0000;
-        }
-        
-        .nav-tabs button.active {
-            background: #8B0000;
-            color: #fbf0da;
-        }
-        
-        .nav-tabs button:hover {
-            background: #8B0000;
-            color: #fbf0da;
-        }
-        
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .form-section {
-            background: white;
-            padding: 12px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            border-right: 4px solid #8B0000;
-        }
-        
-        .form-section h2 {
-            font-size: 16px;
-            margin-bottom: 12px;
-            color: #8B0000;
-        }
-        
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-        
-        .form-grid.full {
-            grid-template-columns: 1fr;
-        }
-        
-        .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .form-group label {
-            font-weight: 600;
-            margin-bottom: 3px;
-            color: #8B0000;
-            font-size: 11px;
-        }
-        
-        .form-group input,
-        .form-group select {
-            padding: 6px 8px;
-            border: 1px solid #fbf0da;
-            border-radius: 4px;
-            font-size: 12px;
-            font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
-            text-align: right;
-            height: 32px;
-            width: 100%;
-            background: #fbf0da;
-        }
-        
-        .form-group input:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: #8B0000;
-            box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.1);
-        }
-        
-        .btn {
-            padding: 7px 14px;
-            border: none;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: inline-block;
-            font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
-        }
-        
-        .btn-primary {
-            background: #8B0000;
-            color: #fbf0da;
-        }
-        
-        .btn-primary:hover {
-            background: #6b0000;
-        }
-        
-        .btn-success {
-            background: #8B0000;
-            color: #fbf0da;
-        }
-        
-        .btn-success:hover {
-            background: #6b0000;
-        }
-        
-        .btn-danger {
-            background: #707070;
-            color: white;
-        }
-        
-        .btn-danger:hover {
-            background: #505050;
-        }
-        
-        .btn-secondary {
-            background: #707070;
-            color: white;
-        }
-        
-        .btn-secondary:hover {
-            background: #505050;
-        }
-        
-        .buttons-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 12px;
-            flex-direction: row-reverse;
-        }
-        
-        .success-message {
-            background: #fbf0da;
-            color: #8B0000;
-            padding: 12px 16px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-            display: none;
-            border-right: 3px solid #8B0000;
-        }
-        
-        .success-message.show {
-            display: block;
-        }
-        
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-        
-        .stat-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            text-align: center;
-            border-top: 3px solid #8B0000;
-        }
-        
-        .stat-card h3 {
-            color: #8B0000;
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: none;
-            margin-bottom: 10px;
-        }
-        
-        .stat-card .value {
-            font-size: 32px;
-            font-weight: 700;
-            color: #8B0000;
-        }
-        
-        .chart-container {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
-            border-right: 4px solid #8B0000;
-        }
-        
-        .chart-container h3 {
-            margin-bottom: 15px;
-            color: #8B0000;
-            font-size: 14px;
-        }
-        
-        .time-chart {
-            display: flex;
-            align-items: flex-end;
-            gap: 8px;
-            height: 200px;
-            justify-content: flex-start;
-            flex-wrap: wrap;
-            flex-direction: row-reverse;
-        }
-        
-        .bar {
-            flex: 1;
-            background: #8B0000;
-            border-radius: 4px 4px 0 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            align-items: center;
-            min-width: 30px;
-            padding-bottom: 5px;
-            position: relative;
-        }
-        
-        .bar span {
-            font-size: 10px;
-            color: #707070;
-            position: absolute;
-            bottom: -20px;
-            white-space: nowrap;
-        }
-        
-        .bar-value {
-            color: white;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            margin-top: 20px;
-            direction: rtl;
-        }
-        
-        thead {
-            background: #8B0000;
-            color: #fbf0da;
-        }
-        
-        th, td {
-            padding: 12px 15px;
-            text-align: right;
-            font-size: 13px;
-        }
-        
-        tbody tr {
-            border-bottom: 1px solid #fbf0da;
-        }
-        
-        tbody tr:hover {
-            background: #fbf0da;
-        }
-        
-        .channel-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-        
-        .channel-instagram { background: #8B0000; color: #fbf0da; }
-        .channel-billboard { background: #707070; color: #fbf0da; }
-        .channel-camper { background: #8B0000; color: #fbf0da; }
-        .channel-dahan { background: #707070; color: #fbf0da; }
-        .channel-other { background: #707070; color: #fbf0da; }
-        
-        .search-box {
-            margin-bottom: 20px;
-        }
-        
-        .search-box input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #fbf0da;
-            border-radius: 4px;
-            font-size: 14px;
-            font-family: 'Vazirmatn', Tahoma, Arial, sans-serif;
-            text-align: right;
-            background: #fbf0da;
-        }
-        
-        .import-section {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-right: 4px solid #8B0000;
-        }
-        
-        .file-input-wrapper {
-            position: relative;
-            overflow: hidden;
-            display: inline-block;
-        }
-        
-        .file-input-wrapper input[type=file] {
-            position: absolute;
-            left: -9999px;
-        }
-        
-        .import-info {
-            background: #fbf0da;
-            padding: 15px;
-            border-radius: 4px;
-            margin: 20px 0;
-            font-size: 12px;
-            line-height: 1.6;
-            text-align: right;
-            color: #8B0000;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>داشبورد CRM دارکو</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#8B0000">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f5f5;color:#333;font-family:Vazirmatn,Tahoma,sans-serif}button,input,select{font-family:inherit}.container{max-width:1200px;margin:auto;padding:14px}.hidden{display:none!important}
+header{background:#8B0000;color:#fbf0da;padding:18px;border-radius:12px;margin-bottom:14px;text-align:center}header h1{margin:0 0 4px;font-size:23px}header p{margin:0;font-size:12px}
+.auth{max-width:430px;margin:8vh auto;background:#fff;padding:24px;border-radius:16px;box-shadow:0 4px 20px #0001;border-top:4px solid #8B0000}.auth h2{color:#8B0000;margin-top:0}.form{display:grid;gap:10px}.form label{font-size:12px;font-weight:700;color:#8B0000}.form input,.form select{width:100%;height:42px;padding:8px;border:1px solid #eadfc9;border-radius:8px;background:#fbf0da}
+.nav{display:flex;gap:7px;overflow:auto;margin-bottom:14px;padding-bottom:3px}.nav button{white-space:nowrap;border:0;border-radius:9px;padding:10px 13px;background:#fbf0da;color:#8B0000;font-weight:700}.nav button.active{background:#8B0000;color:#fbf0da}
+.card{background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 10px #0000000d;margin-bottom:14px;border-right:4px solid #8B0000}.card h2,.card h3{margin:0 0 12px;color:#8B0000;font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.stat{background:#fff;padding:16px;border-radius:12px;text-align:center;border-top:3px solid #8B0000}.stat small{display:block;color:#777}.stat strong{font-size:24px;color:#8B0000}
+.btn{border:0;border-radius:8px;padding:10px 14px;cursor:pointer;font-weight:700}.primary{background:#8B0000;color:#fbf0da}.secondary{background:#707070;color:#fff}.danger{background:#555;color:#fff}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+table{width:100%;border-collapse:collapse;background:#fff}th,td{padding:10px;border-bottom:1px solid #eee;text-align:right;font-size:12px}th{background:#8B0000;color:#fbf0da}.table-wrap{overflow:auto;border-radius:10px}
+.notice{padding:10px;border-radius:8px;background:#fbf0da;color:#8B0000;font-size:12px;margin-bottom:10px}.error{background:#fee;color:#900}.userbar{display:flex;justify-content:space-between;align-items:center;background:#fff;padding:10px 12px;border-radius:10px;margin-bottom:12px;font-size:12px}.money{font-size:28px;font-weight:800;color:#8B0000}
+@media(max-width:700px){.container{padding:9px}.grid,.stats{grid-template-columns:1fr 1fr}header{padding:14px}header h1{font-size:19px}.card{padding:12px}.stat{padding:12px}.stat strong{font-size:20px}th,td{white-space:nowrap}.nav button{padding:9px 11px}}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>☕ داشبورد CRM کافه دارکو</h1>
-            <p>مدیریت سریع لیدها و مشتریان</p>
-        </header>
-        
-        <div class="nav-tabs">
-            <button class="tab-btn active" data-tab="lead-entry">ثبت لید</button>
-            <button class="tab-btn" data-tab="dashboard">داشبورد</button>
-            <button class="tab-btn" data-tab="leads-list">لیست لیدها</button>
-            <button class="tab-btn" data-tab="import-export">صادر/وارد</button>
-        </div>
-        
-        <!-- TAB: ثبت لید -->
-        <div id="lead-entry" class="tab-content active">
-            <div class="form-section">
-                <h2>⚡ ثبت لید جدید (زیر ۲۰ ثانیه)</h2>
-                <div id="successMsg" class="success-message">✓ لید با موفقیت ثبت شد!</div>
-                
-                <form id="leadForm">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="phoneInput">شماره تلفن مشتری *</label>
-                            <input type="tel" id="phoneInput" placeholder="۰۹۱۲۳۴۵۶۷۸۹" required autofocus>
-                        </div>
-                        <div class="form-group">
-                            <label for="nameInput">نام و نام خانوادگی *</label>
-                            <input type="text" id="nameInput" placeholder="علی محمدی" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="channelInput">کانال پیدا کردن *</label>
-                            <select id="channelInput" required>
-                                <option value="">انتخاب کنید</option>
-                                <option value="اینستاگرام">اینستاگرام</option>
-                                <option value="تبلیغات خیابانی">تبلیغات خیابانی</option>
-                                <option value="کمپر">کمپر</option>
-                                <option value="دهان به دهان">دهان به دهان</option>
-                                <option value="سایر">سایر</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="timeInput">ساعت ثبت *</label>
-                            <input type="time" id="timeInput" required>
-                        </div>
-                    </div>
-                    
-                    <div class="buttons-group">
-                        <button type="submit" class="btn btn-primary">✓ ثبت لید</button>
-                        <button type="reset" class="btn btn-secondary">پاک کن</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        
-        <!-- TAB: داشبورد -->
-        <div id="dashboard" class="tab-content">
-            <div class="dashboard">
-                <div class="stat-card">
-                    <h3>کل لیدها</h3>
-                    <div class="value" id="totalLeads">۰</div>
-                </div>
-                <div class="stat-card">
-                    <h3>امروز</h3>
-                    <div class="value" id="todayLeads">۰</div>
-                </div>
-                <div class="stat-card">
-                    <h3>این هفته</h3>
-                    <div class="value" id="weekLeads">۰</div>
-                </div>
-                <div class="stat-card">
-                    <h3>این ماه</h3>
-                    <div class="value" id="monthLeads">۰</div>
-                </div>
-            </div>
-            
-            <div class="chart-container">
-                <h3>لیدها به تفکیک ساعت (امروز)</h3>
-                <div class="time-chart" id="timeChart">
-                    <p style="color: #707070;">هنوز داده‌ای برای امروز ثبت نشده</p>
-                </div>
-            </div>
-            
-            <div class="chart-container">
-                <h3>لیدها به تفکیک کانال</h3>
-                <div id="channelStats"></div>
-            </div>
-        </div>
-        
-        <!-- TAB: لیست لیدها -->
-        <div id="leads-list" class="tab-content">
-            <div class="form-section">
-                <h2>جستجو در لیدها</h2>
-                <div class="search-box">
-                    <input type="text" id="searchInput" placeholder="نام یا شماره تلفن را جستجو کنید...">
-                </div>
-                
-                <div id="leadsTableContainer"></div>
-            </div>
-        </div>
-        
-        <!-- TAB: صادر/وارد -->
-        <div id="import-export" class="tab-content">
-            <div class="import-section">
-                <h2>📥 وارد کردن از اکسل</h2>
-                <p style="margin-bottom: 15px; color: #707070;">فایل اکسل را با ستون‌های زیر آپلود کنید:</p>
-                <div class="import-info">
-                    <strong>ستون‌های مورد نیاز:</strong><br>
-                    • Phone (شماره تلفن)<br>
-                    • Name (نام)<br>
-                    • Channel (کانال: اینستاگرام، تبلیغات خیابانی، کمپر، دهان به دهان، سایر)<br>
-                    • Time (ساعت به فرمت HH:MM)<br>
-                    • Date (تاریخ - اختیاری، فرمت: YYYY-MM-DD)
-                </div>
-                <div class="file-input-wrapper">
-                    <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" />
-                    <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
-                        انتخاب فایل و وارد کردن
-                    </button>
-                </div>
-                <p id="importStatus" style="margin-top: 10px; color: #707070;"></p>
-            </div>
-            
-            <div class="import-section" style="margin-top: 30px;">
-                <h2>📤 صادر کردن به اکسل</h2>
-                <p style="margin-bottom: 15px; color: #707070;">تمام لیدها را به اکسل صادر کنید</p>
-                <div class="buttons-group">
-                    <button class="btn btn-success" onclick="exportToExcel()">
-                        ⬇ دانلود تمام لیدها
-                    </button>
-                    <button class="btn btn-success" onclick="exportTodayLeads()">
-                        ⬇ دانلود لیدهای امروز
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+<div id="login" class="auth">
+<h2>ورود به CRM دارکو</h2>
+<p style="font-size:12px;color:#777">دسترسی هر کاربر بر اساس نقش او کنترل می‌شود.</p>
+<div class="form">
+<label>ایمیل</label><input id="email" type="email" autocomplete="username">
+<label>رمز عبور</label><input id="password" type="password" autocomplete="current-password">
+<button class="btn primary" onclick="login()">ورود</button>
+<div id="loginMsg" class="notice hidden"></div>
+</div>
+</div>
 
-    <script>
-        function toPersianNumber(num) {
-            if (typeof num !== 'number') return num;
-            const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-            return String(num).split('').map(d => isNaN(d) ? d : persianDigits[d]).join('');
-        }
-        
-        const STORAGE_KEY = 'darko_crm_leads';
-        
-        function getLeads() {
-            const stored = localStorage.getItem(STORAGE_KEY);
-            return stored ? JSON.parse(stored) : [];
-        }
-        
-        function saveLeads(leads) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(leads));
-        }
-        
-        function addLead(phone, name, channel, time, date = null) {
-            const leads = getLeads();
-            const lead = {
-                id: Date.now(),
-                phone,
-                name,
-                channel,
-                time,
-                date: date || new Date().toISOString().split('T')[0],
-                createdAt: new Date().toISOString()
-            };
-            leads.push(lead);
-            saveLeads(leads);
-            return lead;
-        }
-        
-        function deleteLead(id) {
-            let leads = getLeads();
-            leads = leads.filter(l => l.id !== id);
-            saveLeads(leads);
-        }
-        
-        document.getElementById('leadForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const phone = document.getElementById('phoneInput').value.trim();
-            const name = document.getElementById('nameInput').value.trim();
-            const channel = document.getElementById('channelInput').value;
-            const time = document.getElementById('timeInput').value;
-            
-            if (!phone || !name || !channel || !time) {
-                alert('لطفاً تمام فیلدها را پر کنید');
-                return;
-            }
-            
-            addLead(phone, name, channel, time);
-            
-            const msg = document.getElementById('successMsg');
-            msg.classList.add('show');
-            setTimeout(() => msg.classList.remove('show'), 3000);
-            
-            document.getElementById('leadForm').reset();
-            document.getElementById('phoneInput').focus();
-            
-            updateDashboard();
-            renderLeadsList();
-        });
-        
-        window.addEventListener('load', () => {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            document.getElementById('timeInput').value = `${hours}:${minutes}`;
-        });
-        
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-                
-                e.target.classList.add('active');
-                const tabId = e.target.dataset.tab;
-                document.getElementById(tabId).classList.add('active');
-                
-                if (tabId === 'dashboard') updateDashboard();
-                if (tabId === 'leads-list') renderLeadsList();
-            });
-        });
-        
-        function updateDashboard() {
-            const leads = getLeads();
-            const today = new Date().toISOString().split('T')[0];
-            const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-            const monthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-            
-            const todayLeadsCount = leads.filter(l => l.date === today).length;
-            const weekLeadsCount = leads.filter(l => l.date >= weekAgo).length;
-            const monthLeadsCount = leads.filter(l => l.date >= monthAgo).length;
-            
-            document.getElementById('totalLeads').textContent = toPersianNumber(leads.length);
-            document.getElementById('todayLeads').textContent = toPersianNumber(todayLeadsCount);
-            document.getElementById('weekLeads').textContent = toPersianNumber(weekLeadsCount);
-            document.getElementById('monthLeads').textContent = toPersianNumber(monthLeadsCount);
-            
-            renderTimeChart(leads, today);
-            renderChannelStats(leads);
-        }
-        
-        function renderTimeChart(leads, today) {
-            const todayLeads = leads.filter(l => l.date === today);
-            const hours = {};
-            
-            for (let i = 0; i < 24; i++) {
-                const hour = String(i).padStart(2, '0');
-                hours[hour] = todayLeads.filter(l => l.time.startsWith(hour)).length;
-            }
-            
-            const chart = document.getElementById('timeChart');
-            if (todayLeads.length === 0) {
-                chart.innerHTML = '<p style="color: #707070;">هنوز داده‌ای برای امروز ثبت نشده</p>';
-                return;
-            }
-            
-            const maxCount = Math.max(...Object.values(hours), 1);
-            const chartHTML = Object.entries(hours)
-                .filter(([_, count]) => count > 0)
-                .map(([hour, count]) => {
-                    const height = (count / maxCount) * 150;
-                    return `
-                        <div class="bar" style="height: ${height}px;">
-                            <span>${hour}:۰۰</span>
-                            <div class="bar-value">${toPersianNumber(count)}</div>
-                        </div>
-                    `;
-                })
-                .join('');
-            
-            chart.innerHTML = chartHTML || '<p style="color: #707070;">هنوز داده‌ای برای امروز ثبت نشده</p>';
-        }
-        
-        function renderChannelStats(leads) {
-            const channels = {};
-            leads.forEach(l => {
-                channels[l.channel] = (channels[l.channel] || 0) + 1;
-            });
-            
-            const html = Object.entries(channels)
-                .map(([channel, count]) => {
-                    const percentage = ((count / leads.length) * 100).toFixed(1);
-                    const channelClass = `channel-${getChannelClass(channel)}`;
-                    return `
-                        <div style="margin-bottom: 12px;">
-                            <span class="channel-badge ${channelClass}">${channel}</span>
-                            <span style="margin-right: 10px; color: #707070;">${toPersianNumber(count)} لید (${toPersianNumber(percentage.replace(/\./g, '،'))}%)</span>
-                        </div>
-                    `;
-                })
-                .join('');
-            
-            document.getElementById('channelStats').innerHTML = html;
-        }
-        
-        function getChannelClass(channel) {
-            const map = {
-                'اینستاگرام': 'instagram',
-                'تبلیغات خیابانی': 'billboard',
-                'کمپر': 'camper',
-                'دهان به دهان': 'dahan',
-                'سایر': 'other'
-            };
-            return map[channel] || 'other';
-        }
-        
-        function renderLeadsList() {
-            const leads = getLeads();
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            
-            const filtered = leads.filter(l => 
-                l.phone.includes(searchTerm) || l.name.toLowerCase().includes(searchTerm)
-            );
-            
-            if (filtered.length === 0) {
-                document.getElementById('leadsTableContainer').innerHTML = '<p style="text-align: center; color: #707070; padding: 20px;">هنوز لیدی ثبت نشده</p>';
-                return;
-            }
-            
-            const html = `
-                <table>
-                    <thead>
-                        <tr>
-                            <th>تاریخ و ساعت</th>
-                            <th>کانال</th>
-                            <th>نام</th>
-                            <th>شماره تلفن</th>
-                            <th>عملیات</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        ${filtered.reverse().map(l => `
-                            <tr>
-                                <td>${l.date} - ${l.time}</td>
-                                <td><span class="channel-badge channel-${getChannelClass(l.channel)}">${l.channel}</span></td>
-                                <td>${l.name}</td>
-                                <td>${l.phone}</td>
-                                <td><button class="btn btn-danger" onclick="deleteLead(${l.id}); renderLeadsList();" style="padding: 6px 12px; font-size: 11px;">حذف</button></td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            `;
-            
-            document.getElementById('leadsTableContainer').innerHTML = html;
-        }
-        
-        document.getElementById('searchInput').addEventListener('input', renderLeadsList);
-        
-        function exportToExcel() {
-            const leads = getLeads();
-            if (leads.length === 0) {
-                alert('هنوز لیدی برای صادرات وجود ندارد');
-                return;
-            }
-            
-            const data = leads.map(l => ({
-                'شماره تلفن': l.phone,
-                'نام': l.name,
-                'کانال': l.channel,
-                'ساعت': l.time,
-                'تاریخ': l.date
-            }));
-            
-            const ws = XLSX.utils.json_to_sheet(data);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'لیدها');
-            XLSX.writeFile(wb, `درکو-لیدها-${new Date().toISOString().split('T')[0]}.xlsx`);
-        }
-        
-        function exportTodayLeads() {
-            const leads = getLeads();
-            const today = new Date().toISOString().split('T')[0];
-            const todayLeads = leads.filter(l => l.date === today);
-            
-            if (todayLeads.length === 0) {
-                alert('لیدی برای امروز ثبت نشده');
-                return;
-            }
-            
-            const data = todayLeads.map(l => ({
-                'شماره تلفن': l.phone,
-                'نام': l.name,
-                'کانال': l.channel,
-                'ساعت': l.time,
-                'تاریخ': l.date
-            }));
-            
-            const ws = XLSX.utils.json_to_sheet(data);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'امروز');
-            XLSX.writeFile(wb, `درکو-لیدهای-امروز-${today}.xlsx`);
-        }
-        
-        document.getElementById('fileInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                try {
-                    const data = new Uint8Array(event.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const rows = XLSX.utils.sheet_to_json(sheet);
-                    
-                    let imported = 0;
-                    rows.forEach(row => {
-                        const phone = String(row.Phone || row['شماره تلفن'] || '').trim();
-                        const name = String(row.Name || row['نام'] || '').trim();
-                        const channel = String(row.Channel || row['کانال'] || '').trim();
-                        const time = String(row.Time || row['ساعت'] || '').trim();
-                        const date = String(row.Date || row['تاریخ'] || '').trim();
-                        
-                        if (phone && name && channel && time) {
-                            addLead(phone, name, channel, time, date || null);
-                            imported++;
-                        }
-                    });
-                    
-                    document.getElementById('importStatus').textContent = `✓ ${toPersianNumber(imported)} لید با موفقیت وارد شد`;
-                    document.getElementById('fileInput').value = '';
-                    updateDashboard();
-                    renderLeadsList();
-                } catch (error) {
-                    document.getElementById('importStatus').textContent = '✗ خطا در خواندن فایل';
-                }
-            };
-            reader.readAsArrayBuffer(file);
-        });
-        
-        updateDashboard();
-    </script>
+<div id="app" class="container hidden">
+<header><h1>☕ CRM دارکو</h1><p>مدیریت لید، فروش و عملیات</p></header>
+<div class="userbar"><span id="userInfo"></span><button class="btn secondary" onclick="logout()">خروج</button></div>
+<div class="nav" id="nav"></div>
+<div id="content"></div>
+</div>
 
-    <script>
-        // Service Worker Registration
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('./service-worker.js')
-                .then(registration => {
-                    console.log('Service Worker registered:', registration);
-                })
-                .catch(error => {
-                    console.log('Service Worker registration failed:', error);
-                });
-        }
-    </script>
+<script>
+const SUPABASE_URL='https://jcpdzqilnhnljvrfsjug.supabase.co';
+const SUPABASE_KEY='sb_publishable_IsYn6XHFo7AUOfE0BDyfZA_sjavx6Vr';
+const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let currentUser=null,currentProfile=null,permissions=new Set();
+
+const tabs=[
+ ['leads','ثبت لید','leads.manage'],['dashboard','داشبورد','dashboard.view'],
+ ['leads-list','لیست لیدها','leads.view'],['sales','فروش من','sales.self.view'],
+ ['total-sales','فروش کل','sales.total.view'],['import','صادر/وارد','leads.manage']
+];
+
+function msg(t,err=false){return '<div class="notice '+(err?'error':'')+'">'+t+'</div>'}
+function toman(n){return new Intl.NumberFormat('fa-IR').format(Number(n||0))}
+async function login(){
+ const email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;
+ const box=document.getElementById('loginMsg');box.classList.remove('hidden');
+ if(!email||!password){box.innerHTML=msg('ایمیل و رمز عبور را وارد کنید',true);return}
+ const {error}=await sb.auth.signInWithPassword({email,password});
+ if(error){box.innerHTML=msg('ورود ناموفق بود. اطلاعات ورود را بررسی کنید.',true);return}
+ await boot();
+}
+async function logout(){await sb.auth.signOut();location.reload()}
+
+async function boot(){
+ const {data:{user}}=await sb.auth.getUser(); if(!user){showLogin();return}
+ currentUser=user;
+ const {data:p,error}=await sb.from('dv_profiles').select('id,full_name,role,is_active').eq('id',user.id).maybeSingle();
+ if(error||!p||!p.is_active){await sb.auth.signOut();showLogin('برای این حساب پروفایل فعال CRM وجود ندارد.');return}
+ currentProfile=p;
+ const {data:rps}=await sb.from('crm_role_permissions').select('permission_key').eq('role_key',p.role);
+ permissions=new Set((rps||[]).map(x=>x.permission_key));
+ document.getElementById('login').classList.add('hidden');document.getElementById('app').classList.remove('hidden');
+ document.getElementById('userInfo').textContent=(p.full_name||user.email)+' · '+p.role;
+ renderNav();openFirst();
+}
+function showLogin(t=''){document.getElementById('app').classList.add('hidden');document.getElementById('login').classList.remove('hidden');if(t){const b=document.getElementById('loginMsg');b.classList.remove('hidden');b.innerHTML=msg(t,true)}}
+function can(p){return permissions.has(p)}
+function renderNav(){document.getElementById('nav').innerHTML=tabs.filter(x=>can(x[2])).map((x,i)=>'<button data-tab="'+x[0]+'" onclick="openTab(\''+x[0]+'\')">'+x[1]+'</button>').join('')}
+function openFirst(){const x=tabs.find(x=>can(x[2]));if(x)openTab(x[0])}
+async function openTab(name){
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));
+ const c=document.getElementById('content');
+ if(name==='leads')c.innerHTML=leadForm();
+ if(name==='dashboard')c.innerHTML=dashboard();
+ if(name==='leads-list')c.innerHTML=leadsList();
+ if(name==='sales')c.innerHTML=await salesMine();
+ if(name==='total-sales')c.innerHTML=await totalSales();
+ if(name==='import')c.innerHTML=importExport();
+ if(name==='dashboard')updateDashboard();
+ if(name==='leads-list')renderLeadsList();
+}
+function leadForm(){return '<div class="card"><h2>⚡ ثبت لید</h2><form id="leadForm" class="form"><div class="grid"><div><label>شماره تلفن</label><input id="phone" required></div><div><label>نام</label><input id="name" required></div><div><label>کانال</label><select id="channel" required><option value="">انتخاب</option><option>اینستاگرام</option><option>تبلیغات خیابانی</option><option>کمپر</option><option>دهان به دهان</option><option>سایر</option></select></div><div><label>ساعت</label><input id="time" type="time" required></div></div><button class="btn primary">ثبت لید</button></form></div>'}
+function dashboard(){return '<div class="stats"><div class="stat"><small>کل لیدها</small><strong id="totalLeads">۰</strong></div><div class="stat"><small>امروز</small><strong id="todayLeads">۰</strong></div><div class="stat"><small>این هفته</small><strong id="weekLeads">۰</strong></div><div class="stat"><small>این ماه</small><strong id="monthLeads">۰</strong></div></div><div class="card" style="margin-top:14px"><h3>لیدها به تفکیک کانال</h3><div id="channelStats"></div></div>'}
+function leadsList(){return '<div class="card"><h2>لیست لیدها</h2><input id="search" placeholder="جستجوی نام یا شماره" oninput="renderLeadsList()" style="width:100%;padding:11px;border:1px solid #eadfc9;border-radius:8px;background:#fbf0da"><div id="leadTable" class="table-wrap" style="margin-top:12px"></div></div>'}
+function importExport(){return '<div class="card"><h2>📥 وارد کردن / 📤 صادر کردن</h2><p>این بخش برای نسخه بعدی اتصال کامل لیدها به دیتابیس آماده شده است.</p><div class="actions"><button class="btn primary" onclick="exportToExcel()">دانلود لیدها</button></div></div>'}
+
+document.addEventListener('submit',async e=>{
+ if(e.target.id!=='leadForm')return;e.preventDefault();
+ const lead={id:Date.now(),phone:phone.value.trim(),name:name.value.trim(),channel:channel.value,time:time.value,date:new Date().toISOString().slice(0,10),createdAt:new Date().toISOString()};
+ const a=JSON.parse(localStorage.getItem('darko_crm_leads')||'[]');a.push(lead);localStorage.setItem('darko_crm_leads',JSON.stringify(a));
+ e.target.reset();alert('✓ لید ثبت شد');openTab('dashboard');
+});
+function getLeads(){return JSON.parse(localStorage.getItem('darko_crm_leads')||'[]')}
+function updateDashboard(){const a=getLeads(),d=new Date().toISOString().slice(0,10),w=new Date(Date.now()-604800000).toISOString().slice(0,10),m=new Date(Date.now()-2592000000).toISOString().slice(0,10);totalLeads.textContent=toman(a.length);todayLeads.textContent=toman(a.filter(x=>x.date===d).length);weekLeads.textContent=toman(a.filter(x=>x.date>=w).length);monthLeads.textContent=toman(a.filter(x=>x.date>=m).length);const c={};a.forEach(x=>c[x.channel]=(c[x.channel]||0)+1);channelStats.innerHTML=Object.entries(c).map(([k,v])=>'<div style="margin:8px 0"><b>'+k+'</b> · '+toman(v)+' لید</div>').join('')||'داده‌ای نیست'}
+function renderLeadsList(){const q=(document.getElementById('search')?.value||'').toLowerCase(),a=getLeads().filter(x=>x.name.toLowerCase().includes(q)||x.phone.includes(q));document.getElementById('leadTable').innerHTML='<table><thead><tr><th>نام</th><th>شماره</th><th>کانال</th><th>تاریخ</th></tr></thead><tbody>'+a.slice().reverse().map(x=>'<tr><td>'+x.name+'</td><td>'+x.phone+'</td><td>'+x.channel+'</td><td>'+x.date+' '+x.time+'</td></tr>').join('')+'</tbody></table>'}
+async function salesMine(){
+ if(!can('sales.self.view'))return msg('دسترسی فروش برای این حساب فعال نیست.',true);
+ const {data,error}=await sb.from('crm_sales').select('id,amount,sale_date,channel,description').eq('seller_id',currentUser.id).order('sale_date',{ascending:false});
+ if(error)return msg('خطا در دریافت فروش.',true);
+ return '<div class="card"><h2>فروش من</h2><div class="money">'+toman(data.reduce((s,x)=>s+Number(x.amount),0))+' تومان</div><p style="color:#777;font-size:12px">این عدد فقط فروش ثبت‌شده توسط حساب شماست.</p><form id="saleForm" class="form"><div class="grid"><div><label>مبلغ فروش</label><input id="saleAmount" type="number" min="1" required></div><div><label>تاریخ</label><input id="saleDate" type="date" value="'+new Date().toISOString().slice(0,10)+'" required></div><div><label>کانال</label><input id="saleChannel" placeholder="شوروم / اینستاگرام / ..."></div><div><label>توضیح</label><input id="saleDesc"></div></div><button class="btn primary">ثبت فروش من</button></form></div><div class="card"><h3>سوابق فروش من</h3>'+salesTable(data)+'</div>'}
+function salesTable(a){return '<div class="table-wrap"><table><thead><tr><th>تاریخ</th><th>مبلغ</th><th>کانال</th><th>توضیح</th></tr></thead><tbody>'+a.map(x=>'<tr><td>'+x.sale_date+'</td><td>'+toman(x.amount)+' تومان</td><td>'+(x.channel||'-')+'</td><td>'+(x.description||'-')+'</td></tr>').join('')+'</tbody></table></div>'}
+async function totalSales(){
+ if(!can('sales.total.view'))return msg('این بخش فقط برای مدیر و ادمین است.',true);
+ const {data,error}=await sb.from('crm_sales_total').select('*').single();
+ if(error)return msg('خطا در دریافت فروش کل: '+error.message,true);
+ return '<div class="card"><h2>🔒 فروش کل</h2><div class="money">'+toman(data.total_sales)+' تومان</div><p>تعداد تراکنش‌ها: '+toman(data.sale_count)+'</p><div class="notice">این اطلاعات به دلیل مجوز نقش، برای فروشنده و پرسنل قابل دسترسی نیست.</div></div>'}
+document.addEventListener('submit',async e=>{if(e.target.id!=='saleForm')return;e.preventDefault();const {error}=await sb.from('crm_sales').insert({seller_id:currentUser.id,amount:Number(saleAmount.value),sale_date:saleDate.value,channel:saleChannel.value||null,description:saleDesc.value||null});if(error)alert('ثبت فروش ناموفق: '+error.message);else openTab('sales')});
+function exportToExcel(){const a=getLeads();if(!a.length)return alert('لیدی وجود ندارد');const ws=XLSX.utils.json_to_sheet(a.map(x=>({'شماره تلفن':x.phone,'نام':x.name,'کانال':x.channel,'ساعت':x.time,'تاریخ':x.date})));const wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'لیدها');XLSX.writeFile(wb,'دارکو-لیدها.xlsx')}
+sb.auth.getSession().then(async({data})=>{if(data.session)await boot()});
+</script>
 </body>
 </html>
