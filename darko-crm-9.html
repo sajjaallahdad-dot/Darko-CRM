@@ -25,11 +25,10 @@ table{width:100%;border-collapse:collapse;background:#fff}th,td{padding:10px;bor
 <body>
 <div id="login" class="auth">
 <h2>ورود به CRM دارکو</h2>
-<p style="font-size:12px;color:#777">دسترسی هر کاربر بر اساس نقش او کنترل می‌شود.</p>
+<p style="font-size:12px;color:#777">ورود مدیر با رمز انجام می‌شود. دسترسی‌ها از طریق نقش CRM کنترل می‌شوند.</p>
 <div class="form">
-<label>ایمیل</label><input id="email" type="email" autocomplete="username">
-<label>رمز عبور</label><input id="password" type="password" autocomplete="current-password">
-<button class="btn primary" onclick="login()">ورود</button>
+<label>رمز ورود مدیر</label><input id="password" type="password" autocomplete="current-password" autofocus>
+<button class="btn primary" onclick="login()">ورود به CRM</button>
 <div id="loginMsg" class="notice hidden"></div>
 </div>
 </div>
@@ -55,11 +54,12 @@ const tabs=[
 
 function msg(t,err=false){return '<div class="notice '+(err?'error':'')+'">'+t+'</div>'}
 function toman(n){return new Intl.NumberFormat('fa-IR').format(Number(n||0))}
+const MANAGER_AUTH_EMAIL='manager@darko.local';
 async function login(){
- const email=document.getElementById('email').value.trim(),password=document.getElementById('password').value;
+ const password=document.getElementById('password').value;
  const box=document.getElementById('loginMsg');box.classList.remove('hidden');
- if(!email||!password){box.innerHTML=msg('ایمیل و رمز عبور را وارد کنید',true);return}
- const {error}=await sb.auth.signInWithPassword({email,password});
+ if(!password){box.innerHTML=msg('رمز ورود مدیر را وارد کنید',true);return}
+ const {error}=await sb.auth.signInWithPassword({email:MANAGER_AUTH_EMAIL,password});
  if(error){box.innerHTML=msg('ورود ناموفق بود. اطلاعات ورود را بررسی کنید.',true);return}
  await boot();
 }
@@ -74,7 +74,7 @@ async function boot(){
  const {data:rps}=await sb.from('crm_role_permissions').select('permission_key').eq('role_key',p.role);
  permissions=new Set((rps||[]).map(x=>x.permission_key));
  document.getElementById('login').classList.add('hidden');document.getElementById('app').classList.remove('hidden');
- document.getElementById('userInfo').textContent=(p.full_name||user.email)+' · '+p.role;
+ document.getElementById('userInfo').textContent=(p.full_name||'مدیر')+' · '+p.role;
  renderNav();openFirst();
 }
 function showLogin(t=''){document.getElementById('app').classList.add('hidden');document.getElementById('login').classList.remove('hidden');if(t){const b=document.getElementById('loginMsg');b.classList.remove('hidden');b.innerHTML=msg(t,true)}}
