@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111827">
+<title>دارکو فایننس | Finance OS</title>
+<style>
+:root{--bg:#f5f7fb;--card:#fff;--ink:#111827;--muted:#6b7280;--line:#e5e7eb;--accent:#dc2626;--accent2:#991b1b;--good:#059669;--warn:#d97706;--bad:#dc2626;--blue:#2563eb;--shadow:0 10px 30px #1118270d}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Tahoma,Arial,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}.side{background:#111827;color:#fff;padding:22px 16px;position:sticky;top:0;height:100vh}.brand{font-size:23px;font-weight:800;margin-bottom:28px}.brand small{display:block;color:#9ca3af;font-size:11px;margin-top:5px}.nav button{width:100%;border:0;background:transparent;color:#d1d5db;padding:12px;border-radius:10px;text-align:right;margin:3px 0}.nav button.active,.nav button:hover{background:#ffffff12;color:#fff}.main{padding:24px;max-width:1500px;width:100%;margin:auto}.top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:20px}.top h1{margin:0;font-size:26px}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{border:1px solid var(--line);background:var(--card);padding:10px 14px;border-radius:10px}.btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}.btn.danger{color:var(--bad)}.grid{display:grid;gap:14px}.kpis{grid-template-columns:repeat(5,minmax(0,1fr))}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow)}.kpi .label{color:var(--muted);font-size:12px}.kpi .num{font-size:25px;font-weight:800;margin-top:8px}.kpi .sub{font-size:11px;color:var(--muted);margin-top:6px}.good{color:var(--good)}.bad{color:var(--bad)}.warn{color:var(--warn)}.blue{color:var(--blue)}.two{grid-template-columns:1.4fr 1fr}.three{grid-template-columns:repeat(3,1fr)}.section{display:none}.section.active{display:block}.tablewrap{overflow:auto}.table{width:100%;border-collapse:collapse;font-size:13px}.table th,.table td{padding:12px 10px;border-bottom:1px solid var(--line);white-space:nowrap}.table th{color:var(--muted);font-weight:600;text-align:right}.pill{display:inline-block;padding:5px 8px;border-radius:999px;font-size:11px;background:#f3f4f6}.pill.good{background:#ecfdf5}.pill.warn{background:#fffbeb}.pill.bad{background:#fef2f2}.empty{padding:35px;text-align:center;color:var(--muted)}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.toolbar input,.toolbar select,.field input,.field select,.field textarea{border:1px solid var(--line);background:#fff;border-radius:10px;padding:10px;width:100%;outline:none}.field{display:flex;flex-direction:column;gap:6px}.field label{font-size:12px;color:var(--muted)}.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.formgrid .full{grid-column:1/-1}.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:20px;z-index:20}.modal.open{display:flex}.modalbox{background:#fff;border-radius:18px;width:min(700px,100%);max-height:90vh;overflow:auto;padding:22px}.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.close{border:0;background:#f3f4f6;border-radius:9px;padding:7px 11px}.alerts{display:flex;flex-direction:column;gap:8px}.alert{border-radius:12px;padding:12px;background:#f9fafb;border:1px solid var(--line);font-size:13px}.alert.bad{border-color:#fecaca;background:#fef2f2}.alert.warn{border-color:#fde68a;background:#fffbeb}.bar{height:9px;background:#f3f4f6;border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:var(--accent)}.chartrow{display:flex;align-items:end;gap:7px;height:170px;padding:12px 4px}.col{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;justify-content:end}.col i{display:block;width:100%;max-width:30px;background:#111827;border-radius:6px 6px 2px 2px;min-height:4px}.col span{font-size:9px;color:var(--muted)}.note{font-size:12px;color:var(--muted);line-height:1.8}.money{direction:ltr;display:inline-block}.mobilebar{display:none}
+@media(max-width:1000px){.app{grid-template-columns:1fr}.side{display:none}.mobilebar{display:flex;position:sticky;top:0;z-index:10;background:#111827;color:#fff;padding:10px;gap:6px;overflow:auto}.mobilebar button{background:#ffffff12;color:#fff;border:0;border-radius:8px;padding:8px 10px;white-space:nowrap}.kpis{grid-template-columns:repeat(2,1fr)}.two,.three{grid-template-columns:1fr}.main{padding:14px}.formgrid{grid-template-columns:1fr}.formgrid .full{grid-column:auto}}
+@media(max-width:520px){.kpis{grid-template-columns:1fr}.top{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="mobilebar" id="mobileNav"></div>
+<div class="app">
+<aside class="side">
+<div class="brand">دارکو فایننس<small>Finance OS • نسخه MVP</small></div>
+<div class="nav" id="nav"></div>
+</aside>
+<main class="main">
+<div class="top"><div><h1 id="title">داشبورد مالی</h1><div class="note">هر ریال ثبت‌شده، یک ردپا دارد.</div></div><div class="actions"><button class="btn" onclick="backup()">پشتیبان</button><button class="btn primary" onclick="openModal('tx')">+ ثبت تراکنش</button></div></div>
+
+<section id="dashboard" class="section active">
+<div class="grid kpis">
+<div class="card kpi"><div class="label">موجودی نقدی</div><div class="num" id="cash">۰</div><div class="sub">صندوق + بانک + کارت</div></div>
+<div class="card kpi"><div class="label">فروش</div><div class="num blue" id="sales">۰</div><div class="sub">دوره انتخاب‌شده</div></div>
+<div class="card kpi"><div class="label">دریافت</div><div class="num good" id="received">۰</div><div class="sub">وجه واقعاً واردشده</div></div>
+<div class="card kpi"><div class="label">مطالبات</div><div class="num warn" id="receivable">۰</div><div class="sub">باقی‌مانده از مشتریان</div></div>
+<div class="card kpi"><div class="label">بدهی</div><div class="num bad" id="payable">۰</div><div class="sub">باقی‌مانده به تأمین‌کنندگان</div></div>
+</div>
+<div class="grid two" style="margin-top:14px">
+<div class="card"><h3>جریان پول</h3><div class="chartrow" id="chart"></div></div>
+<div class="card"><h3>هشدارهای مالی</h3><div class="alerts" id="alerts"></div></div>
+</div>
+<div class="grid three" style="margin-top:14px">
+<div class="card"><h3>فروش</h3><div class="num" id="dashSales">۰</div><div class="note">فروش ثبت‌شده، مستقل از دریافت</div></div>
+<div class="card"><h3>هزینه</h3><div class="num" id="dashExp">۰</div><div class="note">هزینه و خرید ثبت‌شده</div></div>
+<div class="card"><h3>خالص جریان نقد</h3><div class="num" id="dashNet">۰</div><div class="note">دریافت منهای پرداخت</div></div>
+</div>
+</section>
+
+<section id="transactions" class="section">
+<div class="card"><div class="toolbar"><input id="txSearch" placeholder="جستجو در تراکنش‌ها..." oninput="renderTransactions()"><select id="txType" onchange="renderTransactions()"><option value="">همه انواع</option><option value="sale">فروش</option><option value="expense">هزینه</option><option value="purchase">خرید</option><option value="receipt">دریافت</option><option value="payment">پرداخت</option><option value="transfer">انتقال</option></select><button class="btn primary" onclick="openModal('tx')">+ تراکنش</button></div><div class="tablewrap"><table class="table"><thead><tr><th>تاریخ</th><th>نوع</th><th>شرح</th><th>طرف حساب</th><th>مبلغ</th><th>وضعیت</th><th></th></tr></thead><tbody id="txTable"></tbody></table></div></div>
+</section>
+
+<section id="receivables" class="section">
+<div class="grid three"><div class="card kpi"><div class="label">کل مطالبات</div><div class="num warn" id="rTotal">۰</div></div><div class="card kpi"><div class="label">سررسید گذشته</div><div class="num bad" id="rOverdue">۰</div></div><div class="card kpi"><div class="label">وصول‌شده</div><div class="num good" id="rPaid">۰</div></div></div>
+<div class="card" style="margin-top:14px"><div class="toolbar"><input id="rSearch" placeholder="نام مشتری..." oninput="renderReceivables()"><button class="btn primary" onclick="openModal('r')">+ طلب جدید</button></div><div class="tablewrap"><table class="table"><thead><tr><th>مشتری</th><th>فاکتور</th><th>مبلغ</th><th>وصول</th><th>باقی‌مانده</th><th>سررسید</th><th>وضعیت</th><th></th></tr></thead><tbody id="rTable"></tbody></table></div></div>
+</section>
+
+<section id="payables" class="section">
+<div class="grid three"><div class="card kpi"><div class="label">کل بدهی</div><div class="num bad" id="pTotal">۰</div></div><div class="card kpi"><div class="label">سررسید گذشته</div><div class="num bad" id="pOverdue">۰</div></div><div class="card kpi"><div class="label">پرداخت‌شده</div><div class="num good" id="pPaid">۰</div></div></div>
+<div class="card" style="margin-top:14px"><div class="toolbar"><input id="pSearch" placeholder="نام تأمین‌کننده..." oninput="renderPayables()"><button class="btn primary" onclick="openModal('p')">+ بدهی جدید</button></div><div class="tablewrap"><table class="table"><thead><tr><th>تأمین‌کننده</th><th>فاکتور</th><th>مبلغ</th><th>پرداخت</th><th>باقی‌مانده</th><th>سررسید</th><th>وضعیت</th><th></th></tr></thead><tbody id="pTable"></tbody></table></div></div>
+</section>
+
+<section id="accounts" class="section">
+<div class="card"><div class="toolbar"><button class="btn primary" onclick="openModal('account')">+ حساب</button></div><div class="tablewrap"><table class="table"><thead><tr><th>حساب</th><th>نوع</th><th>موجودی</th><th>توضیح</th><th></th></tr></thead><tbody id="aTable"></tbody></table></div></div>
+</section>
+
+<section id="reports" class="section">
+<div class="grid two">
+<div class="card"><h3>گزارش مالی</h3><div class="toolbar"><input type="date" id="fromDate" onchange="renderReports()"><input type="date" id="toDate" onchange="renderReports()"></div><div id="report"></div></div>
+<div class="card"><h3>تحلیل مدیریتی</h3><div id="analysis"></div></div>
+</div>
+</section>
+
+<section id="settings" class="section">
+<div class="grid two"><div class="card"><h3>داده و پشتیبان</h3><p class="note">نسخه فعلی اطلاعات را در مرورگر ذخیره می‌کند. برای جابه‌جایی دستگاه از پشتیبان JSON استفاده کن.</p><div class="actions"><button class="btn" onclick="backup()">خروجی JSON</button><button class="btn" onclick="document.getElementById('restoreFile').click()">ورود JSON</button><input id="restoreFile" type="file" accept=".json" hidden onchange="restore(this)"><button class="btn" onclick="exportCSV()">خروجی CSV تراکنش‌ها</button><button class="btn danger" onclick="resetData()">پاک‌کردن داده‌های آزمایشی</button></div></div><div class="card"><h3>وضعیت سیستم</h3><p>واحد پایه: <b>تومان</b></p><p>حالت: <b>Local-first</b></p><p class="note">برای استفاده چندنفره و دسترسی حسابدار، مرحله بعد اتصال به Supabase و احراز هویت است.</p></div></div>
+</section>
+</main></div>
+
+<div class="modal" id="modal"><div class="modalbox"><div class="modalhead"><h3 id="modalTitle">ثبت</h3><button class="close" onclick="closeModal()">بستن</button></div><div id="modalBody"></div></div></div>
+<script>
+const KEY='darco-finance-v1';
+let db=JSON.parse(localStorage.getItem(KEY)||'null')||{
+accounts:[{id:id(),name:'صندوق',type:'cash',balance:0,note:'صندوق اصلی'},{id:id(),name:'بانک',type:'bank',balance:0,note:'حساب بانکی'},{id:id(),name:'کارتخوان',type:'pos',balance:0,note:'POS'}],
+tx:[],receivables:[],payables:[]
+};
+function id(){return Math.random().toString(36).slice(2,10)+Date.now().toString(36)}
+function save(){localStorage.setItem(KEY,JSON.stringify(db));renderAll()}
+function toman(n){n=Number(n)||0;return new Intl.NumberFormat('fa-IR').format(n)+' تومان'}
+function num(v){return Number(String(v||0).replace(/[٬,\s]/g,''))||0}
+function today(){return new Date().toISOString().slice(0,10)}
+const navItems=[['dashboard','داشبورد','▦'],['transactions','تراکنش‌ها','↔'],['receivables','مطالبات و وصول','◷'],['payables','بدهی‌ها','◈'],['accounts','حساب‌ها','▤'],['reports','گزارش مالی','◒'],['settings','تنظیمات','⚙']];
+function initNav(){document.getElementById('nav').innerHTML=navItems.map(x=>'<button onclick="go(\''+x[0]+'\')" data-nav="'+x[0]+'">'+x[2]+' &nbsp; '+x[1]+'</button>').join('');document.getElementById('mobileNav').innerHTML=navItems.slice(0,6).map(x=>'<button onclick="go(\''+x[0]+'\')">'+x[1]+'</button>').join('')}
+function go(sec){document.querySelectorAll('.section').forEach(x=>x.classList.remove('active'));document.getElementById(sec).classList.add('active');document.querySelectorAll('[data-nav]').forEach(x=>x.classList.toggle('active',x.dataset.nav===sec));document.getElementById('title').textContent=navItems.find(x=>x[0]===sec)[1];renderAll()}
+function openModal(type,data=null){
+let title='',body='';
+if(type==='tx'){title='ثبت تراکنش';body=`<form class="formgrid" onsubmit="addTx(event)">
+<div class="field"><label>تاریخ</label><input name="date" type="date" value="${data?.date||today()}" required></div>
+<div class="field"><label>نوع</label><select name="type"><option value="sale">فروش</option><option value="expense">هزینه</option><option value="purchase">خرید</option><option value="receipt">دریافت</option><option value="payment">پرداخت</option><option value="transfer">انتقال</option></select></div>
+<div class="field"><label>مبلغ کل</label><input name="amount" inputmode="numeric" required placeholder="مثلاً 50000000"></div>
+<div class="field"><label>مبلغ پرداخت/دریافت‌شده</label><input name="paid" inputmode="numeric" placeholder="0"></div>
+<div class="field"><label>طرف حساب</label><input name="party" placeholder="مشتری / تأمین‌کننده"></div>
+<div class="field"><label>حساب</label><select name="account">${db.accounts.map(a=>'<option value="'+a.id+'">'+a.name+'</option>').join('')}</select></div>
+<div class="field"><label>دسته‌بندی</label><select name="cat"><option>فروش</option><option>قهوه / مواد اولیه</option><option>حقوق</option><option>اجاره</option><option>حمل‌ونقل</option><option>بازاریابی</option><option>بیمه</option><option>مالیات</option><option>تعمیرات</option><option>سایر</option></select></div>
+<div class="field"><label>روش پرداخت</label><select name="method"><option>نقد</option><option>کارت</option><option>انتقال بانکی</option><option>نسیه</option><option>سایر</option></select></div>
+<div class="field full"><label>شرح</label><textarea name="desc" rows="2" required placeholder="دقیقاً چه اتفاقی افتاد؟"></textarea></div>
+<div class="full"><button class="btn primary" type="submit">ثبت تراکنش</button></div></form>`}
+if(type==='r'||type==='p'){let isR=type==='r';title=isR?'ثبت طلب جدید':'ثبت بدهی جدید';body=`<form class="formgrid" onsubmit="addDebt(event,'${type}')">
+<div class="field"><label>${isR?'مشتری':'تأمین‌کننده'}</label><input name="party" required></div>
+<div class="field"><label>شماره فاکتور</label><input name="invoice"></div>
+<div class="field"><label>مبلغ کل</label><input name="amount" inputmode="numeric" required></div>
+<div class="field"><label>${isR?'وصول‌شده':'پرداخت‌شده'}</label><input name="paid" inputmode="numeric" value="0"></div>
+<div class="field"><label>سررسید</label><input name="due" type="date"></div>
+<div class="field"><label>توضیح</label><input name="note"></div>
+<div class="full"><button class="btn primary" type="submit">ثبت</button></div></form>`}
+if(type==='account'){title='افزودن حساب';body=`<form class="formgrid" onsubmit="addAccount(event)">
+<div class="field"><label>نام حساب</label><input name="name" required></div><div class="field"><label>نوع</label><select name="type"><option>cash</option><option>bank</option><option>pos</option><option>other</option></select></div><div class="field"><label>موجودی اولیه</label><input name="balance" inputmode="numeric" value="0"></div><div class="field"><label>توضیح</label><input name="note"></div><div class="full"><button class="btn primary" type="submit">ثبت حساب</button></div></form>`}
+document.getElementById('modalTitle').textContent=title;document.getElementById('modalBody').innerHTML=body;document.getElementById('modal').classList.add('open')
+}
+function closeModal(){document.getElementById('modal').classList.remove('open')}
+function addTx(e){e.preventDefault();let f=new FormData(e.target), amount=num(f.get('amount')), paid=num(f.get('paid'));db.tx.unshift({id:id(),date:f.get('date'),type:f.get('type'),amount,paid,party:f.get('party'),account:f.get('account'),cat:f.get('cat'),method:f.get('method'),desc:f.get('desc'),createdAt:new Date().toISOString()});closeModal();save()}
+function addDebt(e,type){e.preventDefault();let f=new FormData(e.target), amount=num(f.get('amount')), paid=num(f.get('paid'));let obj={id:id(),party:f.get('party'),invoice:f.get('invoice'),amount,paid,due:f.get('due'),note:f.get('note'),createdAt:new Date().toISOString()};(type==='r'?db.receivables:db.payables).unshift(obj);closeModal();save()}
+function addAccount(e){e.preventDefault();let f=new FormData(e.target);db.accounts.push({id:id(),name:f.get('name'),type:f.get('type'),balance:num(f.get('balance')),note:f.get('note')});closeModal();save()}
+function del(kind,i){if(!confirm('حذف شود؟'))return;db[kind].splice(i,1);save()}
+function addPayment(kind,i){let arr=kind==='receivables'?db.receivables:db.payables, x=arr[i], label=kind==='receivables'?'مبلغ وصول‌شده':'مبلغ پرداخت‌شده';let v=prompt(label,x.amount-x.paid);if(v===null)return;v=num(v);if(v<=0)return; x.paid=Math.min(x.amount,x.paid+v);save()}
+function status(x){let rem=x.amount-x.paid;if(rem<=0)return '<span class="pill good">تسویه</span>';if(x.due&&x.due<today())return '<span class="pill bad">سررسید گذشته</span>';if(x.paid>0)return '<span class="pill warn">ناقص</span>';return '<span class="pill">باز</span>'}
+function txName(t){return ({sale:'فروش',expense:'هزینه',purchase:'خرید',receipt:'دریافت',payment:'پرداخت',transfer:'انتقال'})[t]||t}
+function renderTransactions(){let q=(document.getElementById('txSearch')?.value||'').toLowerCase(), typ=document.getElementById('txType')?.value||'';let a=db.tx.filter(x=>(!typ||x.type===typ)&&(!q||[x.desc,x.party,x.cat].join(' ').toLowerCase().includes(q)));document.getElementById('txTable').innerHTML=a.length?a.map(x=>`<tr><td>${x.date}</td><td>${txName(x.type)}</td><td>${x.desc}</td><td>${x.party||'-'}</td><td>${toman(x.amount)}</td><td>${x.paid>=x.amount?'<span class="pill good">کامل</span>':x.paid>0?'<span class="pill warn">ناقص</span>':'<span class="pill">ثبت</span>'}</td><td><button class="btn" onclick="deleteTx('${x.id}')">حذف</button></td></tr>`).join(''):'<tr><td colspan="7" class="empty">هنوز تراکنشی ثبت نشده.</td></tr>'}
+function deleteTx(i){if(!confirm('این تراکنش حذف شود؟'))return;db.tx=db.tx.filter(x=>x.id!==i);save()}
+function renderReceivables(){let a=db.receivables,q=(document.getElementById('rSearch')?.value||'').toLowerCase();a=a.filter(x=>x.party.toLowerCase().includes(q));let total=db.receivables.reduce((s,x)=>s+x.amount-x.paid,0),over=db.receivables.filter(x=>x.amount>x.paid&&x.due&&x.due<today()).reduce((s,x)=>s+x.amount-x.paid,0),paid=db.receivables.reduce((s,x)=>s+x.paid,0);['rTotal','rOverdue','rPaid'].forEach((id,i)=>document.getElementById(id).textContent=toman([total,over,paid][i]));document.getElementById('rTable').innerHTML=a.length?a.map((x,i)=>`<tr><td>${x.party}</td><td>${x.invoice||'-'}</td><td>${toman(x.amount)}</td><td>${toman(x.paid)}</td><td>${toman(x.amount-x.paid)}</td><td>${x.due||'-'}</td><td>${status(x)}</td><td><button class="btn" onclick="addPayment('receivables',${db.receivables.indexOf(x)})">ثبت وصول</button></td></tr>`).join(''):'<tr><td colspan="8" class="empty">مطالبه‌ای ثبت نشده.</td></tr>'}
+function renderPayables(){let a=db.payables,q=(document.getElementById('pSearch')?.value||'').toLowerCase();a=a.filter(x=>x.party.toLowerCase().includes(q));let total=db.payables.reduce((s,x)=>s+x.amount-x.paid,0),over=db.payables.filter(x=>x.amount>x.paid&&x.due&&x.due<today()).reduce((s,x)=>s+x.amount-x.paid,0),paid=db.payables.reduce((s,x)=>s+x.paid,0);['pTotal','pOverdue','pPaid'].forEach((id,i)=>document.getElementById(id).textContent=toman([total,over,paid][i]));document.getElementById('pTable').innerHTML=a.length?a.map(x=>`<tr><td>${x.party}</td><td>${x.invoice||'-'}</td><td>${toman(x.amount)}</td><td>${toman(x.paid)}</td><td>${toman(x.amount-x.paid)}</td><td>${x.due||'-'}</td><td>${status(x)}</td><td><button class="btn" onclick="addPayment('payables',${db.payables.indexOf(x)})">ثبت پرداخت</button></td></tr>`).join(''):'<tr><td colspan="8" class="empty">بدهی‌ای ثبت نشده.</td></tr>'}
+function renderAccounts(){document.getElementById('aTable').innerHTML=db.accounts.map((a,i)=>`<tr><td>${a.name}</td><td>${a.type}</td><td>${toman(a.balance)}</td><td>${a.note||'-'}</td><td><button class="btn" onclick="del('accounts',${i})">حذف</button></td></tr>`).join('')}
+function periodTx(){let f=document.getElementById('fromDate')?.value||'0000-01-01',t=document.getElementById('toDate')?.value||'9999-12-31';return db.tx.filter(x=>x.date>=f&&x.date<=t)}
+function renderReports(){let a=periodTx(),sales=a.filter(x=>x.type==='sale').reduce((s,x)=>s+x.amount,0),exp=a.filter(x=>['expense','purchase'].includes(x.type)).reduce((s,x)=>s+x.amount,0),inc=a.filter(x=>['receipt'].includes(x.type)).reduce((s,x)=>s+x.paid||x.amount,0),pay=a.filter(x=>x.type==='payment').reduce((s,x)=>s+x.paid||x.amount,0);document.getElementById('report').innerHTML='<p>فروش: <b>'+toman(sales)+'</b></p><p>هزینه و خرید: <b>'+toman(exp)+'</b></p><p>دریافت: <b>'+toman(inc)+'</b></p><p>پرداخت: <b>'+toman(pay)+'</b></p><p>جریان نقد: <b class="'+(inc-pay>=0?'good':'bad')+'">'+toman(inc-pay)+'</b></p><p>سود ناخالص تقریبی: <b>'+toman(sales-exp)+'</b></p>';document.getElementById('analysis').innerHTML=analysis(sales,exp,inc,pay)}
+function analysis(s,e,i,p){let out=[];if(s===0)out.push('🟡 هنوز فروش ثبت نشده.');if(i<p)out.push('🔴 پرداخت نقدی از دریافت بیشتر است. نقدینگی را بررسی کن.');if(db.receivables.some(x=>x.amount>x.paid&&x.due&&x.due<today()))out.push('🔴 مطالبات سررسید گذشته داری. اولویت وصول تعیین کن.');if(db.payables.some(x=>x.amount>x.paid&&x.due&&x.due<today()))out.push('🔴 بدهی سررسید گذشته داری.');if(e>s&&s>0)out.push('🔴 هزینه و خرید از فروش بیشتر است.');if(!out.length)out.push('🟢 در داده فعلی هشدار بحرانی دیده نمی‌شود.');return '<div class="alerts">'+out.map(x=>'<div class="alert">'+x+'</div>').join('')+'</div><h4>اقدام بعدی</h4><p class="note">مطالبات سررسید گذشته را پیگیری کن، سپس پرداخت‌های نزدیک را با Cash Position تطبیق بده.</p>'}
+function renderDashboard(){let t=db.tx,s=t.filter(x=>x.type==='sale').reduce((a,x)=>a+x.amount,0),e=t.filter(x=>['expense','purchase'].includes(x.type)).reduce((a,x)=>a+x.amount,0),r=t.filter(x=>x.type==='receipt').reduce((a,x)=>a+(x.paid||x.amount),0),p=t.filter(x=>x.type==='payment').reduce((a,x)=>a+(x.paid||x.amount),0),rec=db.receivables.reduce((a,x)=>a+x.amount-x.paid,0),pay=db.payables.reduce((a,x)=>a+x.amount-x.paid,0),cash=db.accounts.reduce((a,x)=>a+Number(x.balance||0),0);[['cash',cash],['sales',s],['received',r],['receivable',rec],['payable',pay],['dashSales',s],['dashExp',e],['dashNet',r-p]].forEach(([i,v])=>document.getElementById(i).textContent=toman(v));let alerts=[];db.receivables.filter(x=>x.amount>x.paid&&x.due&&x.due<today()).forEach(x=>alerts.push({c:'bad',t:'وصول معوق: '+x.party+' • '+toman(x.amount-x.paid)}));db.payables.filter(x=>x.amount>x.paid&&x.due&&x.due<today()).forEach(x=>alerts.push({c:'bad',t:'بدهی سررسید گذشته: '+x.party+' • '+toman(x.amount-x.paid)}));if(r<p)alerts.push({c:'warn',t:'پرداخت‌ها از دریافت‌ها بیشتر شده‌اند.'});document.getElementById('alerts').innerHTML=alerts.length?alerts.slice(0,6).map(a=>'<div class="alert '+a.c+'">'+a.t+'</div>').join(''):'<div class="alert">🟢 هشدار فعالی نداریم.</div>';let days=[...Array(7)].map((_,i)=>{let d=new Date();d.setDate(d.getDate()-6+i);let ds=d.toISOString().slice(0,10),v=t.filter(x=>x.date===ds&&['receipt','sale'].includes(x.type)).reduce((a,x)=>a+(x.paid||x.amount),0);return [ds.slice(5),v]});let mx=Math.max(1,...days.map(x=>x[1]));document.getElementById('chart').innerHTML=days.map(x=>'<div class="col"><i style="height:'+Math.max(5,x[1]/mx*125)+'px"></i><span>'+x[0]+'</span></div>').join('')}
+function renderAll(){renderDashboard();renderTransactions();renderReceivables();renderPayables();renderAccounts();renderReports()}
+function backup(){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(db,null,2)],{type:'application/json'}));a.download='darco-finance-backup-'+today()+'.json';a.click()}
+function restore(inp){let f=inp.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{db=JSON.parse(r.result);save();alert('پشتیبان بازیابی شد.')}catch(e){alert('فایل معتبر نیست.')}};r.readAsText(f)}
+function exportCSV(){let rows=[['تاریخ','نوع','شرح','طرف حساب','مبلغ','پرداخت','دسته','روش'],...db.tx.map(x=>[x.date,txName(x.type),x.desc,x.party,x.amount,x.paid,x.cat,x.method])];let csv='\\uFEFF'+rows.map(r=>r.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='darco-transactions.csv';a.click()}
+function resetData(){if(confirm('تمام داده‌های فعلی این مرورگر پاک شود؟')){localStorage.removeItem(KEY);location.reload()}}
+initNav();renderAll();
+</script>
+</body>
+</html>
